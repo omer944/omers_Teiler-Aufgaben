@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ömers Teiler-Aufgaben bis zur 6. Schulstufe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            font-size: 18px; /* Größere Schriftgröße für den gesamten Text */
+        }
+        h1 {
+            color: #333;
+            font-size: 26px; /* Größere Schriftgröße für den Haupttitel */
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="number"], button, textarea, select {
+            width: 100%;
+            padding: 12px; /* Etwas mehr Padding */
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 18px; /* Größere Schriftgröße für Eingabefelder */
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px; /* Größere Schriftgröße für Buttons */
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 12px; /* Etwas mehr Padding */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            font-size: 18px; /* Größere Schriftgröße für Ergebnisse */
+        }
+        .exercise {
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            font-size: 18px; /* Größere Schriftgröße für das Rechenfeld */
+            height: 300px; /* Größeres Rechenfeld */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ömers Teiler-Aufgaben bis zur 6. Schulstufe</h1>
+
+    <!-- Auswahl der Schwierigkeitsstufe -->
+    <div class="exercise">
+        <h2>Wähle die Schwierigkeitsstufe:</h2>
+        <select id="difficultySelect">
+            <option value="easy">Leicht (50-100)</option>
+            <option value="medium">Mittel (101-300)</option>
+            <option value="hard">Schwer (301-500)</option>
+        </select>
+        <button onclick="generateRandomNumber()">Zufällige Zahl generieren</button>
+        <div id="teilerZahl" class="result"></div>
+        <input type="text" id="teilerInput" placeholder="Gib hier die Teiler ein, getrennt durch Kommas">
+        <button onclick="checkDivisors()">Teiler überprüfen</button>
+        <div class="result" id="teilerResult"></div>
+    </div>
+
+    <!-- Rechenbereich -->
+    <h2>Rechenfeld</h2>
+    <textarea id="calcArea" placeholder="Schreibe hier deine Rechnungen oder Notizen auf..."></textarea>
+</div>
+
+<script>
+    let teilerZahl;
+
+    // Funktion zum Generieren einer Zufallszahl basierend auf der Schwierigkeitsstufe
+    function generateRandomNumber() {
+        const difficulty = document.getElementById('difficultySelect').value;
+        let min, max;
+
+        if (difficulty === 'easy') {
+            min = 50;
+            max = 100;
+        } else if (difficulty === 'medium') {
+            min = 101;
+            max = 300;
+        } else if (difficulty === 'hard') {
+            min = 301;
+            max = 500;
+        }
+
+        teilerZahl = Math.floor(Math.random() * (max - min + 1)) + min;
+        document.getElementById('teilerZahl').innerHTML = `Zahl: ${teilerZahl}`;
+        document.getElementById('teilerResult').innerHTML = "";
+    }
+
+    // Funktion zur Berechnung aller Teiler einer Zahl
+    function calculateDivisors(n) {
+        let divisors = [];
+        for (let i = 1; i <= n; i++) {
+            if (n % i === 0) {
+                divisors.push(i);
+            }
+        }
+        return divisors;
+    }
+
+    // Funktion zur Überprüfung der vom Benutzer eingegebenen Teiler
+    function checkDivisors() {
+        const userInput = document.getElementById('teilerInput').value;
+        const userDivisors = userInput.split(',').map(Number).filter(n => !isNaN(n));
+        const correctDivisors = calculateDivisors(teilerZahl);
+        const resultDiv = document.getElementById('teilerResult');
+
+        const isCorrect = userDivisors.length === correctDivisors.length && 
+                          userDivisors.every(val => correctDivisors.includes(val));
+
+        if (isCorrect) {
+            resultDiv.innerHTML = `Richtig! Die Teiler von ${teilerZahl} sind: ${correctDivisors.join(', ')}.`;
+        } else {
+            resultDiv.innerHTML = `Falsch. Die richtigen Teiler von ${teilerZahl} sind: ${correctDivisors.join(', ')}.`;
+        }
+    }
+</script>
+
+</body>
+</html>
